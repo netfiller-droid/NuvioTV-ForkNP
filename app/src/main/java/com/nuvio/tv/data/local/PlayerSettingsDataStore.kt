@@ -1100,6 +1100,7 @@ class PlayerSettingsDataStore @Inject constructor(
                 enableHttp2 = prefs[enableHttp2Key] ?: PlayerSettings.DEFAULT_ENABLE_HTTP2,
                 nuvioPerformanceModeEnabled = (prefs[nuvioPerformanceModeEnabledKey] ?: PlayerSettings.DEFAULT_NUVIO_PERFORMANCE_MODE_ENABLED) &&
                         android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O,
+                focusDwellPrefetchEnabled = prefs[focusDwellPrefetchEnabledKey] ?: false,
                 subtitleStyle = run {
                     val resolvedPreferredLanguage = resolveSubtitlePreferredLanguage(
                         prefs[subtitlePreferredLanguageKey],
