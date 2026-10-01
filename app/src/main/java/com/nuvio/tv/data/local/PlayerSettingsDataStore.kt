@@ -351,7 +351,9 @@ data class PlayerSettings(
     val enableBufferLogs: Boolean = false,
     val resizeMode: Int = 0,
     // Nuvio ExoPlayer Performance Mode
-    val nuvioPerformanceModeEnabled: Boolean = DEFAULT_NUVIO_PERFORMANCE_MODE_ENABLED
+    val nuvioPerformanceModeEnabled: Boolean = DEFAULT_NUVIO_PERFORMANCE_MODE_ENABLED,
+    // Fork: disable automatic focus prefetch when scrolling
+    val focusDwellPrefetchEnabled: Boolean = false
 ) {
     /**
      * P2 prefetch completion cap in milliseconds, or null to wait for full
@@ -695,6 +697,7 @@ class PlayerSettingsDataStore @Inject constructor(
     private val backBufferDurationMsKey = intPreferencesKey("back_buffer_duration_ms")
     private val retainBackBufferFromKeyframeKey = booleanPreferencesKey("retain_back_buffer_from_keyframe")
     private val nuvioPerformanceModeEnabledKey = booleanPreferencesKey("nuvio_performance_mode_enabled")
+    private val focusDwellPrefetchEnabledKey = booleanPreferencesKey("focus_dwell_prefetch_enabled")
     private val assessmentRevertSnapshotKey = stringPreferencesKey("assessment_revert_snapshot")
 
     private val migrationLoadControlDefaultsAlignedDoneKey = booleanPreferencesKey("migration_load_control_defaults_aligned_done")
