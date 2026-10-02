@@ -462,20 +462,8 @@ fun StreamScreen(
                         }
                     },
                     onStreamFocused = { stream ->
-                        // A-1(a): warm the connection when a row settles under
-                        // focus, so the head/tail window has landed by press.
-                        // DIRECT rows only: a debrid/torrent row has no http(s)
-                        // URL until its press-time resolve, and we must never
-                        // resolve on focus (TorBox account-cost rule). The
-                        // scheme gate in prewarmPlaybackConnection enforces this
-                        // for free; the explicit guard here states the intent.
-                        if (!stream.isDirectDebrid() && !stream.needsLocalDebridResolve()) {
-                            val directUrl = stream.getStreamUrl()
-                            if (!directUrl.isNullOrBlank()) {
-                                com.nuvio.tv.ui.screens.player.PlayerPlaybackNetworking
-                                    .prewarmPlaybackConnection(directUrl, stream.behaviorHints?.proxyHeaders?.request)
-                            }
-                        }
+                        // Fork: Disabled - do not prefetch/warm stream connections while scrolling
+                        // Only fetch when user actively selects the stream by clicking
                     },
                     focusedStreamIndex = focusedStreamIndex,
                     shouldRestoreFocusedStream = restoreFocusedStream,
