@@ -702,11 +702,10 @@ private fun ModernHomeRoute(
         // S4a-3b: focus-dwell stream prefetch for CW cards. Gated on the CW
         // row KEY, not the isCw flag -- ModernHomeRows sets that flag for the
         // Upcoming row too, whose cards are unaired and must not be scraped.
+        // Fork: disabled by default to prevent stream prefetch while scrolling
         onRowItemFocusedCallback = remember(viewModel) {
             { rowKey: String, index: Int, _: Boolean ->
-                if (rowKey == MODERN_CONTINUE_WATCHING_ROW_KEY) {
-                    viewModel.onContinueWatchingItemFocused(index)
-                }
+                // Disabled: do not prefetch streams while scrolling through continue watching
             }
         }
     )
