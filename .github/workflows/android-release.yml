@@ -27,8 +27,9 @@ concurrency:
 jobs:
   release:
     name: ${{ inputs.mode }} Android TV release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       GH_TOKEN: ${{ github.token }}
       LOCAL_PROPERTIES_BASE64: ${{ secrets.LOCAL_PROPERTIES_BASE64 }}
       LOCAL_DEV_PROPERTIES_BASE64: ${{ secrets.LOCAL_DEV_PROPERTIES_BASE64 }}
@@ -39,9 +40,12 @@ jobs:
 
     steps:
       - name: Check out full history
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
+
+      - name: Pull Git LFS files
+        run: git lfs pull || true
 
       - name: Validate release tooling
         run: |
@@ -142,7 +146,7 @@ jobs:
 
       - name: Upload release-note review
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v5
         with:
           name: nuviotv-${{ steps.release.outputs.version }}-${{ inputs.mode }}-release-notes
           path: |
@@ -160,7 +164,7 @@ jobs:
 
       - name: Set up Gradle
         if: inputs.mode != 'dry-run'
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Configure release properties
         if: inputs.mode != 'dry-run'
@@ -207,10 +211,10 @@ jobs:
 
       - name: Upload build artifacts
         if: inputs.mode != 'dry-run'
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v5
         with:
           name: nuviotv-${{ steps.release.outputs.version }}-full-release
-          path: app/build/outputs/apk/full/release/*.apk
+          path: app/build/outputs/apk/full/release/**/*.apk
           if-no-files-found: error
 
       - name: Create GitHub release
