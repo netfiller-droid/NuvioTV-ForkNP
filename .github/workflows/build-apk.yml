@@ -10,21 +10,32 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # Explizite Version statt ubuntu-latest
+    
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Aktiviert Node.js 24 für alle Actions
+
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Set up JDK
-        uses: actions/setup-java@v5
+      - name: Checkout repository
+        uses: actions/checkout@v5 # Update auf v5 (Node 24)
+        with:
+          fetch-depth: 0 # Wichtig für Gradle/git
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5 # Update auf v5 (Node 24)
         with:
           java-version: '17'
           distribution: 'temurin'
-      
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - name: Build Debug APK
-        run: chmod +x ./gradlew && ./gradlew :app:assembleDebug
-      
+        run: ./gradlew :app:assembleDebug --stacktrace # --stacktrace für bessere Fehleranalyse
+
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5 # Update auf v5 (Node 24)
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error # Bricht ab, wenn kein APK gefunden wird
